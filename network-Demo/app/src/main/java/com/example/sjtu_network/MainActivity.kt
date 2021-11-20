@@ -10,6 +10,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.*
 import java.io.IOException
+import kotlin.Exception
 
 class MainActivity : AppCompatActivity() {
     var requestBtn: Button? = null
@@ -63,12 +64,18 @@ class MainActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call, response: Response) {
                 val bodyString = response.body?.string()
-                val doubanBean = gson.fromJson(bodyString, DoubanBean::class.java)
+                try {
+                    val doubanBean = gson.fromJson(bodyString, DoubanBean::class.java)
 
 
-                showText?.text = "${showText?.text.toString()} \n\n\n" +
-                        "Originalname: ${doubanBean.originalName} \n" +
-                        "Alias: ${doubanBean.alias}  "
+                    showText?.text = "${showText?.text.toString()} \n\n\n" +
+                            "Originalname: ${doubanBean.originalName} \n" +
+                            "Alias: ${doubanBean.alias}  "
+                }
+                catch (ex: Exception){
+                    ex.printStackTrace()
+                    showText?.text = bodyString
+                }
             }
         })
     }
